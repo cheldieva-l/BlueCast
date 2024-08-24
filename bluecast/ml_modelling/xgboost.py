@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Literal, Optional, Tuple, Union
 import numpy as np
 import optuna
 import pandas as pd
+import pandas as pand
 import xgboost as xgb
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.utils import class_weight
@@ -224,7 +225,22 @@ class XgboostModel(BaseClassMlModel):
         train_on = get_params_based_on_device(
             self.conf_training, self.conf_params_xgboost, self.conf_xgboost
         )
+        
+        print(x_train)
+        x_train_df=pand.DataFrame(x_train)
+        x_train_df.to_csv('/kaggle/working/train_fit_predict_single_fold.csv' )
+        print(y_train)
+        y_train_df=pand.DataFrame(y_train)
+        y_train_df.to_csv('/kaggle/working/y_train_fit_predict_single_fold.csv' )
 
+        print(x_test)
+        x_test_df=pand.DataFrame(x_test)
+        x_test_df.to_csv('/kaggle/working/test_fit_predict_single_fold.csv' )
+        print(y_test)
+        y_test_df=pand.DataFrame(y_test)
+        y_test_df.to_csv('/kaggle/working/y_test_fit_predict_single_fold.csv' )
+        
+        
         x_train, x_test, y_train, y_test = sample_data(
             x_train, x_test, y_train, y_test, self.conf_training
         )
@@ -884,6 +900,10 @@ class XgboostModel(BaseClassMlModel):
             df, _ = self.custom_in_fold_preprocessor.transform(
                 df, None, predicton_mode=True
             )
+
+        print(df)
+        df_df=pand.DataFrame(df)
+        df_df.to_csv('/kaggle/working/predict_fit_predict_single_fold.csv' )
 
         d_test = xgb.DMatrix(
             df,
